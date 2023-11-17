@@ -1,0 +1,68 @@
+library IEEE;
+use IEEE.STD_LOGIC_1164.ALL;
+use IEEE.STD_LOGIC_ARITH.ALL;
+use IEEE.STD_LOGIC_UNSIGNED.ALL;
+
+entity CaixaReg_tb is
+end CaixaReg_tb;
+
+architecture testbench of CaixaReg_tb is
+    signal reset_tb, soma_tb, subtrai_tb, OK_tb, clock_tb : STD_LOGIC := '0';
+    signal entrada_tb, valor_tb, increment_tb : STD_LOGIC_VECTOR(7 downto 0) := "00000000";
+
+    COMPONENT CaixaReg
+        Port (
+            reset : in STD_LOGIC;
+            soma : in STD_LOGIC;
+            subtrai : in STD_LOGIC;
+            entrada : in STD_LOGIC_VECTOR(7 downto 0);
+            OK : in STD_LOGIC;
+            clock : in STD_LOGIC;
+            valor : out STD_LOGIC_VECTOR(7 downto 0);
+            increment : out STD_LOGIC_VECTOR(7 downto 0)
+        );
+    end component;
+
+    signal done_tb : boolean := false;
+
+begin
+    uut : CaixaReg
+        port map (
+            reset => reset_tb,
+            soma => soma_tb,
+            subtrai => subtrai_tb,
+            entrada => entrada_tb,
+            OK => OK_tb,
+            clock => clock_tb,
+            valor => valor_tb,
+            increment => increment_tb
+        );
+
+    process
+    begin
+        -- Your test scenario here
+        reset_tb <= '1';
+        wait for 10 ns;
+
+        reset_tb <= '0';
+        wait for 10 ns;
+
+        soma_tb <= '1';
+        subtrai_tb <= '0';
+        entrada_tb <= "00000001";
+        OK_tb <= '1';
+        clock_tb <= not clock_tb;
+        wait for 10 ns;
+
+        -- Add more test scenarios as needed
+
+        done_tb <= true;
+    end process;
+
+    process
+    begin
+        wait until done_tb;
+        wait;
+    end process;
+
+end testbench;
